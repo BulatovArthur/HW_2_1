@@ -2,26 +2,28 @@
 
 using namespace std;
 
-struct Data 
-{
-  int a;
-};
-
 struct List 
 {
-  Data d;
+  int d;
   List *next;
 };
 
-void Print(List *u) 
+void Print(List *first, int argc) 
 {
-  List *p = u;
+  if (argc != 1)
+  {
+  List *p = first;
   while (p) 
   {
-    cout << p->d.a << " -> ";
+    cout << p->d << " -> ";
     p = p->next;
   }
   cout << "NULL" << endl;
+  }
+  else
+  {
+    cout << "The list is empty" << endl;
+  }
 }
 
 int main(int argc, char *argv[]) 
@@ -35,47 +37,50 @@ int main(int argc, char *argv[])
   cout << "6. Sort the list items" << endl;
   cout << "7. Quit the program" << endl;
 
-  List *u = nullptr;  // указатель на начало будущего списка, пока список пуст,
-                      // и указатель явно задан равным константе null
-  // u это указатель
+  int *array=new int[argc-1];
 
-  u = new List;  // выделяем память под элемент списка (адрес)
-  if (argc < 2)
+  for(int i = 1; i < argc; i++)
   {
-    cout << "The list is empty" << endl;
+    array[i]=atoi(argv[i]);
   }
-  else
+
+//  List *first = nullptr;  // указатель на начало будущего списка, пока список пуст,
+                      // и указатель явно задан равным константе null
+  // u = first это указатель
+  List *first = new List;
+//  first = new List;  // выделяем память под элемент списка (адрес)
+
+  first->d = *(array + 1);  // заполняем поля с данными (здесь всего одно поле)
+  first->next = nullptr;  // указатель на следующий элемент пуст
+
+  List *last;  // вспомогательная переменная-указатель для хранения последнего
+            // элемента списка 
+  last = first;    // сейчас последний элемент списка совпадает с его началом
+
+  for (int i = 2; i < argc; i++) 
   {
-    u->d.a = (*argv[1]);  // заполняем поля с данными (здесь всего одно поле)
-    u->next = nullptr;  // указатель на следующий элемент пуст
-
-    List *x;  // вспомогательная переменная-указатель для хранения последнего
-            // элемента списка
-    x = u;    // сейчас последний элемент списка совпадает с его началом
-
-    for (int i = 2; i < argc; i++) 
-    {
-      x->next = new List;  // выделяем место в памяти для следующего элемента
+    
+    last->next = new List;  // выделяем место в памяти для следующего элемента
                            // списка и перенаправляем указатель х на выделенную
                            // область памяти
-      x = x->next;
-
-      x->d.a = (*argv[i]);  // затем определяем значение этого элемента списка
-      x->next = nullptr;
-    }
+    last = last->next;
+    last->d = *(array + i);  // затем определяем значение этого элемента списка
+    last->next = nullptr;
+  }
  
-    int op = 0;
-    cin >> op;
+  int op = 0;
+  cin >> op;
 
-    switch(op) 
-    {
-      case 1:
-        Print(u);
-        break;
-      case 2:
-        break;
-    }
-  } 
+  switch(op) 
+  {
+    case 1:
+      Print(first, argc);
+      break;
+    case 2:
+      break;
+  }
+
+  delete first; 
+  delete [] array;  
   return 0;
 }
-
