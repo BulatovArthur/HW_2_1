@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
 //  List *first = nullptr;  // указатель на начало будущего списка, пока список пуст,
                       // и указатель явно задан равным константе null
-  // u = first это указатель
+  // first это указатель
   List *first = new List;
 //  first = new List;  // выделяем память под элемент списка (адрес)
 
